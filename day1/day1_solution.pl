@@ -6,6 +6,8 @@ day1_solution.pl
 
 =cut
 
+use Modern::Perl;
+
 my $filename = "input1.txt";
 
 my $file = IO::File->new($filename) or die "cannot open $filename: $!";
