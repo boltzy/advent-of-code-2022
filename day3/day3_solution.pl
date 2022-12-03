@@ -12,16 +12,15 @@ my $filename = "input.txt";
 
 my $file = IO::File->new($filename) or die "cannot open $filename: $!";
 
-my @rucksacks;
-use Data::Dumper;
-
 my $priority = 1;
 my %priorities = map { $_ => $priority++ } ('a' .. 'z', 'A' .. 'Z');
 
 my $total_priority = 0;
 
-foreach (<$file>) {
-  chomp;
+my @rucksacks = <$file>;
+chomp @rucksacks;
+
+foreach (@rucksacks) {
   my @items = split //;
 
   my @comp1 = @items[0 .. ($#items / 2)];
