@@ -84,7 +84,7 @@ foreach ( 1 .. 9 ) {
 }
 print "\n";
 
-print "Part 1: ";
+print "Part 2: ";
 foreach ( 1 .. 9 ) {
   print $crates2{$_}->[-1];
 }
