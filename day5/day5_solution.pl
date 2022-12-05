@@ -76,8 +76,6 @@ foreach my $instruction ( @input_file ) {
   }
 }
 
-#CFFHVVHNC
-
 print "Part 1: ";
 foreach ( 1 .. 9 ) {
   print $crates1{$_}->[-1];
