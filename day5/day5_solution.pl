@@ -38,18 +38,21 @@ foreach my $line ( @crates_data ) {
 }
 
 my $count = 0;
-my %crates;
+my %crates1;
+my %crates2;
 foreach my $line (reverse @crates_data) {
   if ( $count == 0 ) {
     foreach my $crate_num ( split //, $line ) {
-      $crates{$crate_num} = [];
+      $crates1{$crate_num} = [];
+      $crates2{$crate_num} = [];
     }
   } else {
     my $crate_num = 0;
     foreach my $item ( split //, $line ) {
       $crate_num++;
       next if $item eq '.';
-      push @{$crates{$crate_num}}, $item;
+      push @{$crates1{$crate_num}}, $item;
+      push @{$crates2{$crate_num}}, $item;
     }
   }
   $count++;
@@ -61,14 +64,29 @@ foreach my $instruction ( @input_file ) {
     my $item_count       = $1;
     my $crate_num_source = $2;
     my $crate_num_dest   = $3;
+
+    my @items_to_move1;
+    my @items_to_move2;
     foreach my $item ( 1 .. $item_count ) {
-      push @{$crates{$crate_num_dest}}, pop @{$crates{$crate_num_source}};
+      push @items_to_move1, pop @{$crates1{$crate_num_source}};
+      push @items_to_move2, pop @{$crates2{$crate_num_source}};
     }
+    push @{$crates1{$crate_num_dest}}, @items_to_move1;
+    push @{$crates2{$crate_num_dest}}, reverse @items_to_move2;
   }
 }
 
+#CFFHVVHNC
+
+print "Part 1: ";
 foreach ( 1 .. 9 ) {
-  print $crates{$_}->[-1];
+  print $crates1{$_}->[-1];
+}
+print "\n";
+
+print "Part 1: ";
+foreach ( 1 .. 9 ) {
+  print $crates2{$_}->[-1];
 }
 print "\n";
 
