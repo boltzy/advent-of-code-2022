@@ -16,7 +16,7 @@ my $file = IO::File->new($filename) or die "cannot open $filename: $!";
 my @input_file = <$file>;
 chomp @input_file;
 
-# Get crate data
+# Get crate data (not my finest work, but does the job - LOL)
 my @crates_data;
 my $got_crates;
 while (@input_file) {
