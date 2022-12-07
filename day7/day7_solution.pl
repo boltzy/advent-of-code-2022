@@ -17,54 +17,44 @@ my @data = <$file>;
 chomp @data;
 
 # Build directory tree from instructions
-my %tree;
-$tree{root} = {};
-my $parent_node;
+my %tree = ( root => {} );
 my $current_node = $tree{root};
 my @pos          = ($current_node);
 
 foreach my $line (@data) {
   if ( $line =~ /^(\d+) (\S+)$/ ) {
-    my $size = $1;
-    my $name = $2;
+    my ( $size, $name ) = ( $1, $2 );
     $current_node->{$name} = $size;
-#    say "adding file $name of $size";
+    #    say "adding file $name of $size";
   }
   elsif ( $line =~ /^dir (\S+)$/ ) {
     my $name = $1;
     $current_node->{$name} = {};
-#    say "adding empty dir $name";
+    #    say "adding empty dir $name";
   }
   elsif ( $line =~ /^\$ cd \/$/ ) {
     $current_node = $tree{root};
-#    say "changing dir to /";
+    #    say "changing dir to /";
   }
   elsif ( $line =~ /^\$ cd \.\.$/ ) {
     pop @pos;
     $current_node = $pos[-1];
-    $parent_node  = $pos[-2];
-#    say "changing dir to parent";
+    #    say "changing dir to parent";
   }
   elsif ( $line =~ /^\$ cd (\S+)$/ ) {
     my $name = $1;
-    $parent_node = $pos[-1];
     push @pos, $current_node->{$name};
     $current_node = $pos[-1];
-#    say "changing dir to $name";
+    #    say "changing dir to $name";
   }
 }
 
 # Naughty global vars
-my $total_used        = 0;
+my $total_used = 0;
 my @dir_sizes;
 
 # Calculate dir sizes
 dir_size('root',\%tree);
-
-say "";
-say "Total used space (files under 100K) = $total_used";
-
-my @sorted_dir_sizes = sort { $a->{size} <=> $b->{size} } @dir_sizes;
 
 my ($disk_used)       = map { $_->{size} } grep { $_->{name} eq 'root' } @dir_sizes;
 my $disk_total        = 70000000;
@@ -80,12 +70,15 @@ foreach ( sort { $a->{size} <=> $b->{size} } @dir_sizes ) {
   }
 }
 
-say "The smallest file we need to delete = $smallest_to_delete"
+say "";
+say "Solution1: Total used space (files under 100K) = $total_used";
+
+say "Solution2: The smallest file we need to delete = $smallest_to_delete"
   . " (this will leave "
   . ( $disk_free + $smallest_to_delete )
   . " free space for upgrade)";
 
-
+#-------------------------------------------------------------------------------
 sub dir_size {
   my ($name, $dir) = @_;
   my $size = 0;
@@ -108,7 +101,7 @@ sub dir_size {
 
   return $size;
 }
-
+#-------------------------------------------------------------------------------
 
 
 #===============================================================================
