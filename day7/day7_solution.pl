@@ -54,9 +54,7 @@ my $total_used = 0;
 my @dir_sizes;
 
 # Calculate dir sizes
-dir_size('root',\%tree);
-
-my ($disk_used)       = map { $_->{size} } grep { $_->{name} eq 'root' } @dir_sizes;
+my $disk_used         = dir_size('root',\%tree);
 my $disk_total        = 70000000;
 my $space_for_upgrade = 30000000;
 my $disk_free         = $disk_total - $disk_used;
